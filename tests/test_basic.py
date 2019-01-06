@@ -2,7 +2,6 @@
 
 from .context import sample
 import sample.helpers as helpers
-from sample.helpers import parse_course
 import json
 import datetime
 
@@ -53,22 +52,24 @@ class TestHelper(unittest.TestCase):
 
     def test_get_recurrence(self):
         result = helpers.get_recurrence("MWF", "20190316T235959Z")
-        expected_recurrence = ["RRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR;UNTIL=20190316T235959Z"]
+        expected_recurrence = [
+            "RRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR;UNTIL=20190316T235959Z"]
 
         self.assertEqual(result, expected_recurrence)
 
     def test_get_first_day_of_section_monday(self):
-        result = helpers.get_first_day_of_section("2019-01-07", 2) # Monday: 2nd day of week
+        result = helpers.get_first_day_of_section(
+            "2019-01-07", 2)  # Monday: 2nd day of week
         expected_value = datetime.datetime(2019, 1, 7)
 
         self.assertEquals(expected_value, result)
 
     def test_get_first_day_of_section_tuesday(self):
-        result = helpers.get_first_day_of_section("2019-01-07", 3) # Tuesday: 3rd day of week
+        result = helpers.get_first_day_of_section(
+            "2019-01-07", 3)  # Tuesday: 3rd day of week
         expected_value = datetime.datetime(2019, 1, 8)
 
         self.assertEquals(expected_value, result)
-
 
 
 expected_event = {
@@ -87,34 +88,15 @@ expected_event = {
         'dateTime': '2019-01-07T13:50:00',
         'timeZone': 'America/Los_Angeles',
     },
+    # MWF
+    # Instruction ends: Friday, March 15 (2019)
+    # Note that the time is in "Z" (which is "UTC")
+    #     we intend the end date to be 11:59pm one day later,
+    #     Saturday, March 16 (2019) in UTC Time
     'recurrence': [
-        # MWF
-        # Instruction ends: Friday, March 15 (2019)
-        # Note that the time is in "Z" (which is "UTC")
-        #   we intend the end date to be 11:59pm one day later,
-        #   Saturday, March 16 (2019) in UTC Time
         "RRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR;UNTIL=20190316T235959Z"
     ]
 }
-
-
-class TestParseCourse(unittest.TestCase):
-    """
-    Tests parse_course helper function
-    """
-
-    def setUp(self):
-        JSON_FILENAME = 'math171a.json'
-        with open('tests/jsons/{}'.format(JSON_FILENAME)) as json_file:
-            d = json.load(json_file)
-            self.subject_course = d["subjectCourse"]
-            self.rows = d["rows"]
-
-    def test_parse(self):
-        parse_course(self.subject_course, self.rows)
-        self.fail()
-        # result =
-        # self.assertEquals(result, None)
 
 
 class TestGenerateEvent(unittest.TestCase):
