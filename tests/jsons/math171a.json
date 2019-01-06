@@ -14,37 +14,37 @@
             "BLDG": "PCYNH",
             "Room": "106",
             "Status": "Enrolled",
-            "Action": NaN
+            "Action": null
         },
         {
-            "SubjectCourse": NaN,
-            "Title": NaN,
+            "SubjectCourse": null,
+            "Title": null,
             "SectionCode": "A04",
             "Type": "DI",
-            "Instructor": NaN,
-            "GradeOption": NaN,
-            "Units": NaN,
+            "Instructor": null,
+            "GradeOption": null,
+            "Units": null,
             "Days": "Th",
             "Time": "9:00p-9:50p",
             "BLDG": "APM",
             "Room": "2402",
-            "Status": NaN,
-            "Action": NaN
+            "Status": null,
+            "Action": null
         },
         {
-            "SubjectCourse": NaN,
+            "SubjectCourse": null,
             "Title": "Final Exam",
-            "SectionCode": NaN,
+            "SectionCode": null,
             "Type": "FI",
-            "Instructor": NaN,
-            "GradeOption": NaN,
-            "Units": NaN,
+            "Instructor": null,
+            "GradeOption": null,
+            "Units": null,
             "Days": "F 03/22/2019",
             "Time": "11:30a-2:29p",
             "BLDG": "TBA",
             "Room": "TBA",
-            "Status": NaN,
-            "Action": NaN
+            "Status": null,
+            "Action": null
         }
     ]
 }

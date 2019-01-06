@@ -6,6 +6,8 @@ import json
 import datetime
 import numpy
 
+import webreg_event
+
 import unittest
 
 
@@ -96,18 +98,8 @@ class TestFinalExamEventHelper(unittest.TestCase):
     def test_get_location_none(self):
         """ Tests that get_location returns None if building and room are not published yet. 
         """
-
-        result_nan_capitalized = helpers.get_location(numpy.NaN, numpy.NaN)
-        self.assertIsNone(result_nan_capitalized)
-
-        result_nan = helpers.get_location(numpy.nan, numpy.nan)
-        self.assertIsNone(result_nan)
-
-        result_nan_string_capitalized = helpers.get_location("NaN", "NaN")
-        self.assertIsNone(result_nan_string_capitalized)
-
-        result_nan_string = helpers.get_location("nan", "nan")
-        self.assertIsNone(result_nan_string)
+        self.assertIsNone(helpers.get_location("APM", None))
+        self.assertIsNone(helpers.get_location(None, None))
 
 
 expected_event = {
@@ -135,6 +127,12 @@ expected_event = {
         "RRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR;UNTIL=20190316T235959Z"
     ]
 }
+
+class TestPasteBoard(unittest.TestCase):
+
+    def test_paste(self):
+        result = webreg_event.generate_events_from_pasteboard()
+        self.assertIsNotNone(result)
 
 
 class TestGenerateEvent(unittest.TestCase):

@@ -152,25 +152,6 @@ def get_byday(days: str):
     return byday_str
 
 
-def check_nan(n) -> bool: 
-    """
-    Return True if the value is nan/NaN. 
-        :param n: the value to check
-    """
-    if type(n) == "float": 
-        if math.isnan(n):
-            return True
-        elif n != n:
-            return True
-    elif type(n) == "str":
-        if n == "NaN":
-            return True
-        elif n == "nan": 
-            return True
-    else: 
-        return False
-
-
 def get_location(building: str, room: str) -> str:
     """
     Return location string if building and room are both not "nan". 
@@ -178,7 +159,7 @@ def get_location(building: str, room: str) -> str:
         :param building:str: 
         :param room:str: 
     """
-    if check_nan(building) or check_nan(room):
+    if building is None or room is None:
         return None
     else:
         return "{} {}".format(building, room)

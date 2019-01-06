@@ -25,13 +25,13 @@ def get_table(htmlPasteContent, column_names):
 
 def get_courses(table: DataFrame):
     maxRowIndex = len(table) - 1
-    print(maxRowIndex)
     currentIndex = 0
     currentCourse = None
     courses = dict()
     while(currentIndex <= maxRowIndex):
         s: pandas.Series = table.iloc[currentIndex]
         row = s.to_dict()
+        # print(json.dumps(row)) # To generate test data
         if str(row["SubjectCourse"]) != "nan":  # To be checked
             # Create new currentCourse and save courseName, object pointer pair
             courseName = row["SubjectCourse"]
