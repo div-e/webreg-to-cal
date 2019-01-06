@@ -32,7 +32,7 @@ def get_courses(table: DataFrame):
         s: pandas.Series = table.iloc[currentIndex]
         row = s.to_dict()
         # print(json.dumps(row)) # To generate test data
-        if str(row["SubjectCourse"]) != "nan":  # To be checked
+        if row["SubjectCourse"] is not None:  # To be checked
             # Create new currentCourse and save courseName, object pointer pair
             courseName = row["SubjectCourse"]
             currentCourse = list()
@@ -52,7 +52,7 @@ def get_events(courses: dict):
                 warnings.warn("Unsupported section type: {} for course: {}. Skipping row: {}".format(
                     row["Type"], subject_course, row))
                 continue
-            e = helpers.generate_section_event(subject_course, row)
+            e = helpers.generate(subject_course, row)
             events.append(e)
     return events
 

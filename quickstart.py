@@ -27,7 +27,7 @@ def main():
 
     # Create a new calendar for the convenience of testing 
     calendar = {
-        'summary': 'Schedule FI 2',
+        'summary': 'Schedule FI 5',
         'timeZone': 'America/Los_Angeles'
     }
 

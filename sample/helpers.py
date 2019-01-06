@@ -152,6 +152,13 @@ def get_byday(days: str):
     return byday_str
 
 
+def check_unpublished(val: str) -> bool:
+    """
+    Returns True if value is "TBA" or None. 
+        :param val:str: 
+    """
+    return val is None or val == "TBA"
+
 def get_location(building: str, room: str) -> str:
     """
     Return location string if building and room are both not "nan". 
@@ -159,7 +166,7 @@ def get_location(building: str, room: str) -> str:
         :param building:str: 
         :param room:str: 
     """
-    if building is None or room is None:
+    if check_unpublished(building) or check_unpublished(room):
         return None
     else:
         return "{} {}".format(building, room)
