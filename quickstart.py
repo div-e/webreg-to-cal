@@ -11,8 +11,9 @@ SCOPES = 'https://www.googleapis.com/auth/calendar'
 
 
 def main():
-    """Shows basic usage of the Google Calendar API.
-    Prints the start and name of the next 10 events on the user's calendar.
+    """ Log in user to the Google Calendar. 
+    Creates calendar "Schedule 1". 
+    Inserts recurrent evennts to the calendar. 
     """
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -33,13 +34,15 @@ def main():
     created_calendar = service.calendars().insert(body=calendar).execute()
 
     cal_id = created_calendar['id']
-    print(cal_id)
 
     # Get events from pasteboard
     events_to_add = webreg_event.generate_events_from_pasteboard()
+
     for event in events_to_add:
+        # Add each event to the calendar just created
         recurring_event = service.events().insert(calendarId=cal_id, body=event).execute()
-        print(recurring_event['id'])
+        event_id = recurring_event['id']
+        print("event summary: {} event id: {}".format(event["summary"] event_id))
 
 if __name__ == '__main__':
     main()
