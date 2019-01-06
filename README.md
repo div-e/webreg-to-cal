@@ -13,3 +13,6 @@ Follow the instruction to login. Please watch out for privacy notices as you log
 The schedule should have been populated in a new calendar called "Schedule 1" in your 
 Google Calendar account. If not, delete the calendar, find out what is wrong with code, and
 submit an issue or try to fix it and make a pull request. Any contribution is encouraged. 
+
+# Known issues
+Note that Google Calendar API credentials as specified in ```credentials.json``` is subject to cancellation. In which case, follow [Google Calendar Guide](https://developers.google.com/calendar/quickstart/python). 
