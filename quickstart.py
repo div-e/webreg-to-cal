@@ -13,7 +13,7 @@ SCOPES = 'https://www.googleapis.com/auth/calendar'
 def main():
     """ Log in user to the Google Calendar. 
     Creates calendar "Schedule 1". 
-    Inserts recurrent evennts to the calendar. 
+    Inserts recurrent events to the calendar. 
     """
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -27,7 +27,7 @@ def main():
 
     # Create a new calendar for the convenience of testing 
     calendar = {
-        'summary': 'Schedule 1',
+        'summary': 'Schedule FI 5',
         'timeZone': 'America/Los_Angeles'
     }
 

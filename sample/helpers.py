@@ -1,5 +1,7 @@
 import datetime
 import re
+import numpy
+import math
 
 QUARTER_START_DATE = "2019-01-07"
 QUARTER_END_UTC_STR = "20190316T235959Z"
@@ -150,8 +152,24 @@ def get_byday(days: str):
     return byday_str
 
 
-def get_location(building: str, room: str):
-    return "{} {}".format(building, room)
+def check_unpublished(val: str) -> bool:
+    """
+    Returns True if value is "TBA" or None. 
+        :param val:str: 
+    """
+    return val is None or val == "TBA"
+
+def get_location(building: str, room: str) -> str:
+    """
+    Return location string if building and room are both not "nan". 
+        If any of building and room is "nan", None is returned. 
+        :param building:str: 
+        :param room:str: 
+    """
+    if check_unpublished(building) or check_unpublished(room):
+        return None
+    else:
+        return "{} {}".format(building, room)
 
 
 def get_recurrence(days: str, until: str) -> [str]:
@@ -169,10 +187,32 @@ def get_recurrence(days: str, until: str) -> [str]:
     byday = get_byday(days)
     return ["RRULE:FREQ={};BYDAY={};UNTIL={}".format(freq, byday, until)]
 
-
-def generate_event(subject_course, row: dict) -> dict:
+def get_date_once(days: str) -> datetime.datetime:
+    """ Returns datetime of the midnight(12AM) on the date specified in days. 
+        :param days:str: WebReg "Days" field example: "F 03/22/2019"
     """
-    Returns Google Calendar event dict from SubjectCourse and table row. 
+    date_str = days.split().pop() 
+    return datetime.datetime.strptime(date_str, "%m/%d/%Y")
+
+
+def get_time_pair_once(days: str, time: str) -> (datetime.datetime, datetime.datetime):
+    """
+    Returns a tuple of time range from WebReg Days and Time field. 
+        :param days:str: WebReg "Days" field example: "F 03/22/2019"
+        :param time:str: WebReg "Time" field example: "11:30a-2:29p"
+    """
+    start_offset, end_offset = get_offset_pair(time)
+    start_day_datetime = get_date_once(days)
+    start_time, end_time = get_time_pair(
+        start_offset, end_offset, start_day_datetime)
+    return start_time, end_time
+
+
+def generate_section_event(subject_course, row: dict) -> dict:
+    """
+    Returns recurrent Google Calendar event dict from SubjectCourse and table row of type: 
+        * "DI": Discussion
+        * "LE": Lecture
         :param subject_course: course name, example: "MATH 171A"
         :param row:dict: table row obtained on WebReg 
     """
@@ -182,10 +222,10 @@ def generate_event(subject_course, row: dict) -> dict:
     start_offset, end_offset = get_offset_pair(row["Time"])
     start_time, end_time = get_time_pair(
         start_offset, end_offset, start_day_datetime)
+    location = get_location(row["BLDG"], row["Room"])
 
-    return {
+    d = {
         "summary": get_summary(subject_course, row["Type"]),
-        "location": get_location(row["BLDG"], row["Room"]), 
         "start": {
             'dateTime': start_time.isoformat(),
             'timeZone': DEFAULT_TIMEZONE,
@@ -196,3 +236,47 @@ def generate_event(subject_course, row: dict) -> dict:
         },
         "recurrence": get_recurrence(row["Days"], QUARTER_END_UTC_STR)
     }
+    if location is not None:
+        d["location"] = location 
+    return d
+
+
+def generate_final_exam_event(subject_course, row: dict) -> dict:
+    """
+    Returns recurrent Google Calendar event dict from SubjectCourse and table row of type: 
+        * "FI": Final Exam
+        :param subject_course: course name, example: "MATH 171A"
+        :param row:dict: table row obtained on WebReg 
+    """
+    start_time, end_time = get_time_pair_once(row["Days"], row["Time"])
+    location = get_location(row["BLDG"], row["Room"])
+    d = {
+        "summary": get_summary(subject_course, row["Type"]),
+        "start": {
+            'dateTime': start_time.isoformat(),
+            'timeZone': DEFAULT_TIMEZONE,
+        },
+        "end": {
+            'dateTime': end_time.isoformat(),
+            'timeZone': DEFAULT_TIMEZONE,
+        }
+    }
+    if location is not None:
+        d["location"] = location
+    return d
+
+
+def generate(subject_course, row: dict) -> dict:
+    """
+    Returns Google Calendar event dict from SubjectCourse and table row. 
+        :param subject_course: 
+        :param row:dict: 
+    """
+    row_type = row["Type"]  # examples: FI, DI, LE
+    if row_type == "FI":
+        return generate_final_exam_event(subject_course, row)
+    elif row_type == "DI" or row_type == "LE":
+        return generate_section_event(subject_course, row)
+    else:
+        raise ValueError("Row type: {} not supported. Course: {}, row: {}".format(
+            row_type, subject_course, row))

@@ -4,6 +4,9 @@ from .context import sample
 import sample.helpers as helpers
 import json
 import datetime
+import numpy
+
+import webreg_event
 
 import unittest
 
@@ -72,6 +75,33 @@ class TestHelper(unittest.TestCase):
         self.assertEquals(expected_value, result)
 
 
+class TestFinalExamEventHelper(unittest.TestCase):
+
+    def test_get_time_pair(self):
+        """
+            "Days": "F 03/22/2019",
+            "Time": "11:30a-2:29p",
+        """
+        days = "F 03/22/2019"
+        time = "11:30a-2:29p"
+        result = helpers.get_time_pair_once(days, time)
+        expected_value =  (datetime.datetime(2019, 3, 22, 11, 30),
+                          datetime.datetime(2019, 3, 22, 14, 29))
+        self.assertEqual(result, expected_value)
+        
+    def test_get_date_once(self):
+        days = "F 03/22/2019"
+        result = helpers.get_date_once(days)
+        expected_value = datetime.datetime(2019, 3, 22)
+        self.assertEqual(result, expected_value)
+    
+    def test_get_location_none(self):
+        """ Tests that get_location returns None if building and room are not published yet. 
+        """
+        self.assertIsNone(helpers.get_location("APM", None))
+        self.assertIsNone(helpers.get_location(None, None))
+
+
 expected_event = {
     'summary': 'MATH 171A LE',
     # 'location': '800 Howard St., San Francisco, CA 94103',
@@ -98,6 +128,12 @@ expected_event = {
     ]
 }
 
+class TestPasteBoard(unittest.TestCase):
+
+    def test_paste(self):
+        result = webreg_event.generate_events_from_pasteboard()
+        self.assertIsNotNone(result)
+
 
 class TestGenerateEvent(unittest.TestCase):
     """
@@ -113,13 +149,13 @@ class TestGenerateEvent(unittest.TestCase):
             self.rows = d["rows"]
 
     def test_lecture_event(self):
-        result = helpers.generate_event(self.subject_course, self.rows[0])
+        result = helpers.generate_section_event(self.subject_course, self.rows[0])
         self.assertDictEqual(result, expected_event)
 
     def test_discussion_event(self):
         row = self.rows[1]
         print(row)
-        result = helpers.generate_event(self.subject_course, row)
+        result = helpers.generate_section_event(self.subject_course, row)
         expected_section_event = {
             'summary': 'MATH 171A DI',
             # 'location': '800 Howard St., San Francisco, CA 94103',
@@ -147,6 +183,41 @@ class TestGenerateEvent(unittest.TestCase):
         }
 
         self.assertDictEqual(result, expected_section_event)
+
+    def test_final_exam_event(self):
+        """
+        MATH 171A: 
+            "SubjectCourse": NaN,
+            "Title": "Final Exam",
+            "SectionCode": NaN,
+            "Type": "FI",
+            "Instructor": NaN,
+            "GradeOption": NaN,
+            "Units": NaN,
+            "Days": "F 03/22/2019",
+            "Time": "11:30a-2:29p",
+            "BLDG": "TBA",
+            "Room": "TBA",
+            "Status": NaN,
+            "Action": NaN
+        """
+        row = self.rows[2]
+        result = helpers.generate(self.subject_course, row)
+
+        expected_final_exam_event = {
+            'summary': 'MATH 171A FI',
+            # 'location': '800 Howard St., San Francisco, CA 94103',
+            # There should be no location 
+            # 'description': 'A chance to hear more about Google\'s developer products.',
+            'start': {
+                'dateTime': '2019-03-22T11:30:00',
+                'timeZone': 'America/Los_Angeles',
+            },
+            'end': {
+                'dateTime': '2019-03-22T14:29:00',
+                'timeZone': 'America/Los_Angeles',
+            }
+        }
 
 
 if __name__ == '__main__':

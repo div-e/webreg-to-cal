@@ -6,7 +6,7 @@ from sample import helpers
 
 import json
 
-SECTION_TYPE_SUPPORTED = ["LE", "DI"]
+SECTION_TYPE_SUPPORTED = ["LE", "DI", "FI"]
 WEBREG_LABELS = ["SubjectCourse", "Title", "SectionCode", "Type", "Instructor",
                  "GradeOption", "Units", "Days", "Time", "BLDG", "Room", "Status", "Action"]
 
@@ -17,23 +17,22 @@ def get_table(htmlPasteContent, column_names):
                                  # Locate the table
                                  attrs={"id": "list-id-table"}
                                  )
-    # print(tableMany)
-    # print("ssssssss")
     table: DataFrame = tableMany[0]
     table.set_axis(column_names, axis=1, inplace=True)
-    return table
+    table_none = table.where(pandas.notnull(table), None)
+    return table_none
 
 
 def get_courses(table: DataFrame):
     maxRowIndex = len(table) - 1
-    print(maxRowIndex)
     currentIndex = 0
     currentCourse = None
     courses = dict()
     while(currentIndex <= maxRowIndex):
         s: pandas.Series = table.iloc[currentIndex]
         row = s.to_dict()
-        if str(row["SubjectCourse"]) != "nan":  # To be checked
+        # print(json.dumps(row)) # To generate test data
+        if row["SubjectCourse"] is not None:  # To be checked
             # Create new currentCourse and save courseName, object pointer pair
             courseName = row["SubjectCourse"]
             currentCourse = list()
@@ -53,7 +52,7 @@ def get_events(courses: dict):
                 warnings.warn("Unsupported section type: {} for course: {}. Skipping row: {}".format(
                     row["Type"], subject_course, row))
                 continue
-            e = helpers.generate_event(subject_course, row)
+            e = helpers.generate(subject_course, row)
             events.append(e)
     return events
 
