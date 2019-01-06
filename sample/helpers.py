@@ -155,7 +155,3 @@ def generate_event(subject_course, row: dict):
     d["recurrence"] = get_recurrence(row["Days"], QUARTER_END_UTC_STR)
     return d
 
-def parse_course(subject_course, rows:dict): 
-    for row in rows:
-        r = generate_event(subject_course, row)
-        raise NotImplementedError

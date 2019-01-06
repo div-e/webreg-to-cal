@@ -2,41 +2,11 @@ from richxerox import *
 import pandas
 from pandas import DataFrame
 import warnings
+from sample import helpers
 
 import json
 
-# import pdfquery
-# from lxml import etree
-# from tabula import read_pdf
-
-
-def validateNonCourseName(subjectCourseString):
-    s = str(subjectCourseString)
-    # Note that this detects only "some" case not all cases
-    return (len(s.split(" ")) != 2)
-
-
-# pdf = pdfquery.PDFQuery("/Users/billyrao/Developer/webregToCalendar/Schedule_webregMain.pdf")
-# pdf.load()
-# # pdf.tree.write("test2.xml", pretty_print=True, encoding="utf-8")
-# e = pdf.extract([
-#     ('with_formatter', 'text'),
-#     # ('with_parent', 'LTTextVertical'),
-#     ('Days','LTTextBoxHorizontal')
-# ])
-# print(e["Days"])
-#
-# df = read_pdf("/Users/billyrao/Developer/webregToCalendar/Schedule_webregMain.pdf", stream=True,
-#               #   output_format="json",
-#               #   pandas_options={'columns': ['Subject Course', 'Title', 'Section Code', 'Type',
-#               #                               'Instructor', 'Grade Option', 'Units', 'Days', 'Time',
-#               #                               'BLDG', 'Room', 'Status / (Position)', 'Action']}
-#
-#               )
-# df.columns = ['Subject Course', 'FOOBAR', 'Title', 'Section Code', 'Type',
-#               'Instructor', 'Grade Option', 'Units', 'Days', 'Time',
-#               'BLDG', 'Room', 'Status / (Position)']
-# print(df)
+SECTION_TYPE_SUPPORTED = ["LE", "DI"]
 
 htmlPasteContent = paste(format='html')
 column_names = ["SubjectCourse", "Title","SectionCode","Type","Instructor","GradeOption","Units","Days","Time","BLDG","Room","Status","Action"]
@@ -62,34 +32,19 @@ while(currentIndex <= maxRowIndex):
     if str(row["SubjectCourse"]) != "nan":  # To be checked
         # Create new currentCourse and save courseName, object pointer pair
         courseName = row["SubjectCourse"]
-        print(courseName)
         currentCourse = list()
         courses[courseName] = currentCourse
-    # else:
-    #     # Double check that currentCourse represents empty value
-    #     if not validateNonCourseName(row["Subject Course"]):
-    #         warnings.warn(
-    #             message="The string: {} parsed as courseName might not be a course name"
-    #                 .format(row["Subject Course"]))
     currentCourse.append(row)
 
     # Increment row counter
     currentIndex += 1
 
-# print(courses)
-
-def parse_course(subject_course, rows): 
-    raise NotImplementedError
-
-for subject_course, rows in courses.items():
-    d = {
-        "subjectCourse": subject_course, 
-        "rows": rows
-    }
-    print(json.dumps(d))
-    
-    # parse_course(subject_course, rows)
-
-# for courseName, courseComponent in table:
-#     print(courseName)
-# if row["Subject Course"] != nan:
+def get_events(courses: dict):
+    events = list()
+    for subject_course, rows in courses.items():
+        for row in rows:
+            if row["Type"] not in SECTION_TYPE_SUPPORTED:
+                warnings.warn("Unsupported section type. Skipping row: {}".format(row) )
+                continue
+            e = helpers.generate_event(subject_course, row)
+            events.append(e)
