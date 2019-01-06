@@ -15,7 +15,8 @@ Google Calendar account. If not, delete the calendar, find out what is wrong wit
 submit an issue or try to fix it and make a pull request. Any contribution is encouraged. 
 
 # Limitations
+Currently, we only support sections with type: "FI" (Final Exam), "DI" (Discussion), and "LE" (Lecture). Sections not supported will trigger a warning and will not be added to target calendar. 
 Note that this is an open source software. No one is liable for the code. Code doesn't work? Please help by submitting an issue. 
 
 # Known issues
-Note that Google Calendar API credentials as specified in ```credentials.json``` is subject to cancellation. In which case, follow [Google Calendar Guide](https://developers.google.com/calendar/quickstart/python). 
+Note that Google Calendar API credentials as specified in ```credentials.json``` are subjected to cancellation. In which case, follow [Google Calendar Guide](https://developers.google.com/calendar/quickstart/python). 
