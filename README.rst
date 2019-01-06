@@ -1,12 +1,15 @@
-Sample Module Repository
+WebReg to Calendar Events 
 ========================
 
-This simple project is an example repo for Python projects.
+# How to use
 
-`Learn more <http://www.kennethreitz.org/essays/repository-structure-and-python>`_.
-
----------------
-
-If you want to learn more about ``setup.py`` files, check out `this repository <https://github.com/kennethreitz/setup.py>`_.
-
-✨🍰✨
+## Step 1: 
+Open WebReg to the page that displays your schedule. Select All and then click copy. 
+## Step 2:
+In terminal, run ```python3 quickstart.py ```
+## Step 3: 
+Follow the instruction to login. Please watch out for privacy notices as you login. 
+## Step 4: 
+The schedule should have been populated in a new calendar called "Schedule 1" in your 
+Google Calendar account. If not, delete the calendar, find out what is wrong with code, and
+submit an issue or try to fix it and make a pull request. Any contribution is encouraged. 
