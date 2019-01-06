@@ -1,4 +1,4 @@
-from richxerox import *
+from richxerox import paste 
 import pandas
 from pandas import DataFrame
 import warnings
