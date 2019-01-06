@@ -150,6 +150,10 @@ def get_byday(days: str):
     return byday_str
 
 
+def get_location(building: str, room: str):
+    return "{} {}".format(building, room)
+
+
 def get_recurrence(days: str, until: str) -> [str]:
     """
     Returns the recurrence field that specified which days of a week do the section
@@ -181,6 +185,7 @@ def generate_event(subject_course, row: dict) -> dict:
 
     return {
         "summary": get_summary(subject_course, row["Type"]),
+        "location": get_location(row["BLDG"], row["Room"]), 
         "start": {
             'dateTime': start_time.isoformat(),
             'timeZone': DEFAULT_TIMEZONE,

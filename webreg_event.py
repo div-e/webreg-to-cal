@@ -1,4 +1,4 @@
-from richxerox import paste 
+from richxerox import paste
 import pandas
 from pandas import DataFrame
 import warnings
@@ -7,18 +7,22 @@ from sample import helpers
 import json
 
 SECTION_TYPE_SUPPORTED = ["LE", "DI"]
-WEBREG_LABELS = ["SubjectCourse", "Title","SectionCode","Type","Instructor","GradeOption","Units","Days","Time","BLDG","Room","Status","Action"]
+WEBREG_LABELS = ["SubjectCourse", "Title", "SectionCode", "Type", "Instructor",
+                 "GradeOption", "Units", "Days", "Time", "BLDG", "Room", "Status", "Action"]
+
 
 def get_table(htmlPasteContent, column_names):
-    tableMany = pandas.read_html(htmlPasteContent, 
-        skiprows=1, # Expect row 0 to have only nan 
-        attrs={"id":"list-id-table"} # Locate the table 
-        )
+    tableMany = pandas.read_html(htmlPasteContent,
+                                 skiprows=1,  # Expect row 0 to have only nan
+                                 # Locate the table
+                                 attrs={"id": "list-id-table"}
+                                 )
     # print(tableMany)
     # print("ssssssss")
     table: DataFrame = tableMany[0]
     table.set_axis(column_names, axis=1, inplace=True)
     return table
+
 
 def get_courses(table: DataFrame):
     maxRowIndex = len(table) - 1
@@ -46,11 +50,13 @@ def get_events(courses: dict):
     for subject_course, rows in courses.items():
         for row in rows:
             if row["Type"] not in SECTION_TYPE_SUPPORTED:
-                warnings.warn("Unsupported section type. Skipping row: {}".format(row) )
+                warnings.warn("Unsupported section type: {} for course: {}. Skipping row: {}".format(
+                    row["Type"], subject_course, row))
                 continue
             e = helpers.generate_event(subject_course, row)
             events.append(e)
     return events
+
 
 def generate_events_from_pasteboard() -> []:
 

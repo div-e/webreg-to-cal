@@ -75,7 +75,7 @@ class TestHelper(unittest.TestCase):
 expected_event = {
     'summary': 'MATH 171A LE',
     # 'location': '800 Howard St., San Francisco, CA 94103',
-    # 'location': "PCYNH 106",
+    'location': "PCYNH 106",
     # 'description': 'A chance to hear more about Google\'s developer products.',
     'start': {
         # Instead of '2018-09-07T13:50:00-07:00'
@@ -123,7 +123,7 @@ class TestGenerateEvent(unittest.TestCase):
         expected_section_event = {
             'summary': 'MATH 171A DI',
             # 'location': '800 Howard St., San Francisco, CA 94103',
-            # 'location': "APM 2402",
+            'location': "APM 2402",
             # 'description': 'A chance to hear more about Google\'s developer products.',
             'start': {
                 # Instead of '2018-09-07T13:50:00-07:00'
