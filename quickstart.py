@@ -27,7 +27,7 @@ def main():
 
     # Create a new calendar for the convenience of testing 
     calendar = {
-        'summary': 'Schedule 1',
+        'summary': 'Schedule 2',
         'timeZone': 'America/Los_Angeles'
     }
 
@@ -42,7 +42,7 @@ def main():
         # Add each event to the calendar just created
         recurring_event = service.events().insert(calendarId=cal_id, body=event).execute()
         event_id = recurring_event['id']
-        print("event summary: {} event id: {}".format(event["summary"] event_id))
+        print("event summary: {} event id: {}".format(event["summary"], event_id))
 
 if __name__ == '__main__':
     main()
