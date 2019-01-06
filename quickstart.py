@@ -3,6 +3,7 @@ import datetime
 from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
+import webreg_event
 
 # If modifying these scopes, delete the file token.json.
 # SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
@@ -39,7 +40,7 @@ def main():
 
     # Create a new calendar for the convenience of testing 
     calendar = {
-        'summary': 'Test Calendar 2',
+        'summary': 'Schedule 1',
         'timeZone': 'America/Los_Angeles'
     }
 
@@ -48,37 +49,11 @@ def main():
     cal_id = created_calendar['id']
     print(cal_id)
 
-    # Try adding sample event
-    sample_section_event = {
-            'summary': 'MATH 171A DI',
-            # 'location': '800 Howard St., San Francisco, CA 94103',
-            # 'location': "APM 2402",
-            # 'description': 'A chance to hear more about Google\'s developer products.',
-            'start': {
-                # Instead of '2018-09-07T13:50:00-07:00'
-                # 'America/Los_Angeles' has daylight saving, so we will not use
-                #   dateTime with fixed offset
-                'dateTime': '2019-01-10T21:00:00',
-                'timeZone': 'America/Los_Angeles',
-            },
-            'end': {
-                'dateTime': '2019-01-10T21:50:00',
-                'timeZone': 'America/Los_Angeles',
-            },
-            'recurrence': [
-                # MWF
-                # Instruction ends: Friday, March 15 (2019)
-                # Note that the time is in "Z" (which is "UTC")
-                #   we intend the end date to be 11:59pm one day later,
-                #   Saturday, March 16 (2019) in UTC Time
-                "RRULE:FREQ=WEEKLY;BYDAY=TH;UNTIL=20190316T235959Z"
-            ]
-        }
-
-    recurring_event = service.events().insert(calendarId=cal_id, body=sample_section_event).execute()
-
-    print(recurring_event['id'])
-
+    # Get events from pasteboard
+    events_to_add = webreg_event.generate_events_from_pasteboard()
+    for event in events_to_add:
+        recurring_event = service.events().insert(calendarId=cal_id, body=event).execute()
+        print(recurring_event['id'])
 
 if __name__ == '__main__':
     main()
