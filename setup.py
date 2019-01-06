@@ -13,13 +13,13 @@ with open('LICENSE') as f:
     license = f.read()
 
 setup(
-    name='sample',
+    name='webreg-to-cal',
     version='0.1.0',
-    description='Utility for adding class schedule to Google Calendar ',
+    description='Adds class schedule to Google Calendar',
     long_description=readme,
-    author='Kenneth Reitz',
-    author_email='me@kennethreitz.com',
-    url='https://github.com/kennethreitz/samplemod',
+    author='Zixuan Rao',
+    author_email='z1rao@ucsd.edu',
+    url='https://github.com/div-e/webreg-to-cal',
     license=license,
     packages=find_packages(exclude=('tests', 'docs'))
 )
