@@ -6,7 +6,7 @@ from sample import helpers
 
 import json
 
-SECTION_TYPE_SUPPORTED = ["LE", "DI"]
+SECTION_TYPE_SUPPORTED = ["LE", "DI", "FI"]
 WEBREG_LABELS = ["SubjectCourse", "Title", "SectionCode", "Type", "Instructor",
                  "GradeOption", "Units", "Days", "Time", "BLDG", "Room", "Status", "Action"]
 
