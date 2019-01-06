@@ -1,0 +1,50 @@
+{
+    "subjectCourse": "MATH 171A",
+    "rows": [
+        {
+            "SubjectCourse": "MATH 171A",
+            "Title": "Intro Num Optimiz/Linear Prog",
+            "SectionCode": "A00",
+            "Type": "LE",
+            "Instructor": "Wong, Elizabeth Lai Sum",
+            "GradeOption": "L",
+            "Units": 4.0,
+            "Days": "MWF",
+            "Time": "1:00p-1:50p",
+            "BLDG": "PCYNH",
+            "Room": "106",
+            "Status": "Enrolled",
+            "Action": NaN
+        },
+        {
+            "SubjectCourse": NaN,
+            "Title": NaN,
+            "SectionCode": "A04",
+            "Type": "DI",
+            "Instructor": NaN,
+            "GradeOption": NaN,
+            "Units": NaN,
+            "Days": "Th",
+            "Time": "9:00p-9:50p",
+            "BLDG": "APM",
+            "Room": "2402",
+            "Status": NaN,
+            "Action": NaN
+        },
+        {
+            "SubjectCourse": NaN,
+            "Title": "Final Exam",
+            "SectionCode": NaN,
+            "Type": "FI",
+            "Instructor": NaN,
+            "GradeOption": NaN,
+            "Units": NaN,
+            "Days": "F 03/22/2019",
+            "Time": "11:30a-2:29p",
+            "BLDG": "TBA",
+            "Room": "TBA",
+            "Status": NaN,
+            "Action": NaN
+        }
+    ]
+}
