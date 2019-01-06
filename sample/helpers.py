@@ -215,10 +215,10 @@ def generate_section_event(subject_course, row: dict) -> dict:
     start_offset, end_offset = get_offset_pair(row["Time"])
     start_time, end_time = get_time_pair(
         start_offset, end_offset, start_day_datetime)
+    location = get_location(row["BLDG"], row["Room"])
 
-    return {
+    d = {
         "summary": get_summary(subject_course, row["Type"]),
-        "location": get_location(row["BLDG"], row["Room"]),
         "start": {
             'dateTime': start_time.isoformat(),
             'timeZone': DEFAULT_TIMEZONE,
@@ -229,6 +229,9 @@ def generate_section_event(subject_course, row: dict) -> dict:
         },
         "recurrence": get_recurrence(row["Days"], QUARTER_END_UTC_STR)
     }
+    if location is not None:
+        d["location"] = location 
+    return d
 
 
 def generate_final_exam_event(subject_course, row: dict) -> dict:
@@ -240,9 +243,8 @@ def generate_final_exam_event(subject_course, row: dict) -> dict:
     """
     start_time, end_time = get_time_pair_once(row["Days"], row["Time"])
     location = get_location(row["BLDG"], row["Room"])
-    return {
+    d = {
         "summary": get_summary(subject_course, row["Type"]),
-        "location": get_location(row["BLDG"], row["Room"]),
         "start": {
             'dateTime': start_time.isoformat(),
             'timeZone': DEFAULT_TIMEZONE,
@@ -252,6 +254,9 @@ def generate_final_exam_event(subject_course, row: dict) -> dict:
             'timeZone': DEFAULT_TIMEZONE,
         }
     }
+    if location is not None:
+        d["location"] = location
+    return d
 
 
 def generate(subject_course, row: dict) -> dict:
