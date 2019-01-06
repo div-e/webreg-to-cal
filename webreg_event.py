@@ -17,11 +17,10 @@ def get_table(htmlPasteContent, column_names):
                                  # Locate the table
                                  attrs={"id": "list-id-table"}
                                  )
-    # print(tableMany)
-    # print("ssssssss")
     table: DataFrame = tableMany[0]
     table.set_axis(column_names, axis=1, inplace=True)
-    return table
+    table_none = table.where(pandas.notnull(table), None)
+    return table_none
 
 
 def get_courses(table: DataFrame):
@@ -53,7 +52,7 @@ def get_events(courses: dict):
                 warnings.warn("Unsupported section type: {} for course: {}. Skipping row: {}".format(
                     row["Type"], subject_course, row))
                 continue
-            e = helpers.generate_event(subject_course, row)
+            e = helpers.generate_section_event(subject_course, row)
             events.append(e)
     return events
 
