@@ -3,10 +3,10 @@ import pandas
 from pandas import DataFrame
 import warnings
 from sample import helpers
+from sample.helpers import SECTION_TYPE_SUPPORTED
 
 import json
 
-SECTION_TYPE_SUPPORTED = ["LE", "DI", "FI"]
 WEBREG_LABELS = ["SubjectCourse", "Title", "SectionCode", "Type", "Instructor",
                  "GradeOption", "Units", "Days", "Time", "BLDG", "Room", "Status", "Action"]
 

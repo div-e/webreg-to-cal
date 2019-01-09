@@ -3,6 +3,7 @@ import re
 import numpy
 import math
 
+SECTION_TYPE_SUPPORTED = ["LE", "DI", "FI", "ST"]
 QUARTER_START_DATE = "2019-01-07"
 QUARTER_END_UTC_STR = "20190316T235959Z"
 DEFAULT_TIMEZONE = 'America/Los_Angeles'
@@ -275,7 +276,7 @@ def generate(subject_course, row: dict) -> dict:
     row_type = row["Type"]  # examples: FI, DI, LE
     if row_type == "FI":
         return generate_final_exam_event(subject_course, row)
-    elif row_type == "DI" or row_type == "LE":
+    elif row_type == "DI" or row_type == "LE" or row_type == "ST":
         return generate_section_event(subject_course, row)
     else:
         raise ValueError("Row type: {} not supported. Course: {}, row: {}".format(
