@@ -66,8 +66,7 @@ def get_offset(time_str: str) -> datetime.timedelta:
 
 
 def get_offset_pair(time_str: str) -> (datetime.timedelta, datetime.timedelta):
-    """
-    Converts time range to a pair of offset from midnight of a day. 
+    """ Converts time range to a pair of offset from midnight of a day. 
         :param time_str:str: time range, example: "11:30a-2:29p"
     """
     time_many = time_str.split("-")
@@ -81,6 +80,11 @@ def get_offset_pair(time_str: str) -> (datetime.timedelta, datetime.timedelta):
 def get_time_pair(start_offset: datetime.timedelta,
                   end_offset: datetime.timedelta,
                   quarter_start: datetime.datetime) -> (datetime.datetime, datetime.datetime):
+    """ Returns a tuple of datetime from two offsets and the midnight datetime. 
+        :param start_offset:datetime.timedelta: duration between midnight and the start of section 
+        :param end_offset:datetime.timedelta: duration between midnight and the end of section
+        :param quarter_start:datetime.datetime: datetime of midnight of the day of section 
+    """ 
     start_time = quarter_start + start_offset
     end_time = quarter_start + end_offset
     return (start_time, end_time)
@@ -160,6 +164,7 @@ def check_unpublished(val: str) -> bool:
     """
     return val is None or val == "TBA"
 
+
 def get_location(building: str, room: str) -> str:
     """
     Return location string if building and room are both not "nan". 
@@ -188,11 +193,12 @@ def get_recurrence(days: str, until: str) -> [str]:
     byday = get_byday(days)
     return ["RRULE:FREQ={};BYDAY={};UNTIL={}".format(freq, byday, until)]
 
+
 def get_date_once(days: str) -> datetime.datetime:
     """ Returns datetime of the midnight(12AM) on the date specified in days. 
         :param days:str: WebReg "Days" field example: "F 03/22/2019"
     """
-    date_str = days.split().pop() 
+    date_str = days.split().pop()
     return datetime.datetime.strptime(date_str, "%m/%d/%Y")
 
 
@@ -238,7 +244,7 @@ def generate_section_event(subject_course, row: dict) -> dict:
         "recurrence": get_recurrence(row["Days"], QUARTER_END_UTC_STR)
     }
     if location is not None:
-        d["location"] = location 
+        d["location"] = location
     return d
 
 
