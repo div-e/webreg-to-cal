@@ -3,3 +3,8 @@ sphinx
 richxerox
 google-api-python-client
 oauth2client
+setuptools
+pandas
+lxml
+html5lib
+bs4
