@@ -3,9 +3,9 @@ import re
 import numpy
 import math
 
-SECTION_TYPE_SUPPORTED = ["LE", "DI", "FI", "ST"]
-QUARTER_START_DATE = "2019-09-23"
-QUARTER_END_UTC_STR = "20191214T235959Z"
+SECTION_TYPE_SUPPORTED = ["LE", "DI", "FI", "ST", "MI"]
+QUARTER_START_DATE = "2020-01-06"
+QUARTER_END_UTC_STR = "20200313T235959Z"
 DEFAULT_TIMEZONE = 'America/Los_Angeles'
 
 # Mapping days of the week: Sunday to 1, Monday to 2, ..., Saturday to 7
@@ -252,6 +252,7 @@ def generate_final_exam_event(subject_course, row: dict) -> dict:
     """
     Returns recurrent Google Calendar event dict from SubjectCourse and table row of type: 
         * "FI": Final Exam
+        * "MI": Midterm
         :param subject_course: course name, example: "MATH 171A"
         :param row:dict: table row obtained on WebReg 
     """
@@ -280,7 +281,7 @@ def generate(subject_course, row: dict) -> dict:
         :param row:dict: 
     """
     row_type = row["Type"]  # examples: FI, DI, LE
-    if row_type == "FI":
+    if row_type == "FI" or row_type == "MI":
         return generate_final_exam_event(subject_course, row)
     elif row_type == "DI" or row_type == "LE" or row_type == "ST":
         return generate_section_event(subject_course, row)
