@@ -15,7 +15,7 @@ def get_table(htmlPasteContent, column_names):
     tableMany = pandas.read_html(htmlPasteContent,
                                  skiprows=1,  # Expect row 0 to have only nan
                                  # Locate the table
-                                 attrs={"id": "list-id-table"}
+                                 # attrs={"id": "list-id-table"}
                                  )
     table: DataFrame = tableMany[0]
     table.set_axis(column_names, axis=1, inplace=True)
