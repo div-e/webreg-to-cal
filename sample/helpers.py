@@ -2,11 +2,26 @@ import datetime
 import re
 import numpy
 import math
+import yaml
+
+"""
+Updates globals with values from yaml, for example, 
 
 SECTION_TYPE_SUPPORTED = ["LE", "DI", "FI", "ST", "MI"]
 QUARTER_START_DATE = "2020-01-06"
 QUARTER_END_UTC_STR = "20200313T235959Z"
 DEFAULT_TIMEZONE = 'America/Los_Angeles'
+
+"""
+with open("config.yaml") as file:
+    try:
+        from yaml import CLoader as Loader, CDumper as Dumper
+    except ImportError:
+        from yaml import Loader, Dumper
+
+    y = yaml.load(file, Loader=Loader)
+    globals().update(y)
+
 
 # Mapping days of the week: Sunday to 1, Monday to 2, ..., Saturday to 7
 DAYS_MAP = {
